@@ -1,23 +1,24 @@
 # This program allows the Crazyflie 2.1+ with a Flowdeck V2 to be controlled with only a keyboard.
 # Need to figure out how to make the Flowdeck stable when flying over objects of varying heights
-import time
 import logging
 import threading
-from pynput import keyboard
+import time
+from threading import Event
+
 import cflib
 import cflib.crtp
 from cflib.crazyflie import Crazyflie
+from cflib.crazyflie.log import LogConfig
 from cflib.crazyflie.syncCrazyflie import SyncCrazyflie
 from cflib.positioning.motion_commander import MotionCommander
-from cflib.crazyflie.log import LogConfig
-from threading import Event
+from pynput import keyboard
 
 # Configure logging to show only errors
 logging.basicConfig(level=logging.ERROR)
 
 # Connection URI and flight control constants
 # Uniform Resource Identifier, InterfaceType://InterfaceId/InterfaceChannel/InterfaceSpeed Change to match your Crazyflies URI
-URI = "radio://0/80/2M" 
+URI = "radio://0/80/2M/E7E7E7E7E7"
 DEFAULT_HEIGHT = 0.5        # Sets the default height for takeoff range: 0.2 <= X <= 3.0 meters, limited by the ranged of optical sensor on flowdeck V2. Flight above 3m will be unstable
 BASE_SPEED = 0.35           # Sets the base speed of the drone in m/s range: 0 <= X <= 1 m/s by default you can change this limit with the parameter posCtlPid.xyVelMax in cfclient. Max speed ~3m/s, depending on whats attached to your crazyflie.
 SPEED_STEP = 0.05           # Changes the crazyflies speed by 0.05 m/s. As long as the cf wont be past max or min BASE_SPEED once executed this number can be anything.
